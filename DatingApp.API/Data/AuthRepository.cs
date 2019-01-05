@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace DatingApp.API.Data
             
             using (var hmac = new HMACSHA512(user.PasswordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 if(!user.PasswordHash.SequenceEqual(computedHash))
                     return null;
@@ -38,7 +39,7 @@ namespace DatingApp.API.Data
             using(var hmac = new HMACSHA512())
             {
                 user.PasswordSalt = hmac.Key;
-                user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
 
             await _context.Users.AddAsync(user);
