@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
 
   model: any = {};
+  photoUrl: string;
 
   constructor(
     private authService: AuthService,
@@ -18,6 +19,9 @@ export class NavComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    this.authService.currentPhotoUrl.subscribe(photoUrl => {
+      this.photoUrl = photoUrl;
+    });
   }
 
   login() {
@@ -48,14 +52,6 @@ export class NavComponent implements OnInit {
   get userName(): string {
     if (this.authService.decodedToken) {
       return this.authService.decodedToken.unique_name;
-    }
-
-    return '';
-  }
-
-  get photoUrl(): string {
-    if (this.authService.currentUser) {
-      return this.authService.currentUser.photoUrl;
     }
 
     return '';
